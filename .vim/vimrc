@@ -1,0 +1,16 @@
+let s:analytics_path = resolve(expand('<sfile>:p:h') . '/../test.zsh')
+if filereadable(s:analytics_path)
+  function! SemverTestCmd(args) abort
+    let args = substitute(a:args, '\s\+$', '', '')
+    if has('terminal')
+        let cmd = 'terminal'
+    elseif has('nvim')
+        let cmd = 'noautocmd new | terminal'
+    else
+        let cmd = '!'
+    endif
+    execute cmd s:analytics_path args
+  endfunction
+
+  command! -nargs=* Test call SemverTestCmd(<q-args>)
+endif

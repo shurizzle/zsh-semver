@@ -1,0 +1,14 @@
+local NAT ALPHANUM IDENT FIELD CORE PRERELEASE BUILD SEMVER_REGEX
+
+NAT='0|[1-9][0-9]*'
+ALPHANUM='[0-9]*[A-Za-z-][0-9A-Za-z-]*'
+IDENT="$NAT|$ALPHANUM"
+FIELD='[0-9A-Za-z-]+'
+
+CORE="($NAT)\\.($NAT)\\.($NAT)"
+PRERELEASE="\\-((${IDENT})(\\.(${IDENT}))*)"
+BUILD="\\+(${FIELD}(\\.${FIELD})*)"
+
+SEMVER_REGEX="^[vV]?${CORE}($PRERELEASE)?($BUILD)?$"
+
+# vim: ft=zsh

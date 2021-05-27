@@ -1,0 +1,25 @@
+(( $+1 )) || {
+  echo "Usage: $0 <variable name or string>"
+  return 1
+}
+
+setopt LOCAL_OPTIONS BASH_REMATCH
+
+source "${${(%):-%x}:A:h}/../regexp.zsh"
+
+if [[ "$1" =~ $SEMVER_REGEX ]]; then
+  return 0
+else
+  ret=$?
+
+  case "${(Pt)1}" in
+    (association)
+      [ -n "${${(P)1}[major]}" -a -n "${${(P)1}[minor]}" -a -n "${${(P)1}[patch]}" ]
+      ;;
+    (*)
+      return 1
+      ;;
+  esac
+fi
+
+# vim: ft=zsh

@@ -1,0 +1,32 @@
+emulate -L zsh
+
+(( $+1 )) || {
+  echo "Usage: $0 <semver> [varname]"
+  return 1
+}
+
+setopt LOCAL_OPTIONS BASH_REMATCH
+
+source "${${(%):-%x}:A:h}/../regexp.zsh"
+
+if [[ "$1" =~ $SEMVER_REGEX ]]; then
+  local major="${BASH_REMATCH[2]}"
+  local minor="${BASH_REMATCH[3]}"
+  local patch="${BASH_REMATCH[4]}"
+  local prere="${BASH_REMATCH[6]}"
+  local build="${BASH_REMATCH[11]}"
+
+
+  local varname="REPLY"
+  (( $+2 )) && varname="$2"
+
+  eval "$varname"'=(major ${(q)major} minor ${(q)minor} patch ${(q)patch})'
+  [ -z "$prere" ] || eval "$varname+=(prere ${(q)prere})"
+  [ -z "$build" ] || eval "$varname+=(build ${(q)build})"
+
+  return 0
+else
+  return 1
+fi
+
+# vim: ft=zsh

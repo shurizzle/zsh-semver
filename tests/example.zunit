@@ -1,0 +1,26 @@
+#!/usr/bin/env zunit
+
+@test 'Parse complex' {
+  typeset -A result
+  result=(major 2 minor 1 patch 0 prere w.t.f build b.123)
+  typeset -A parsed
+  if semver:parse '2.1.0-w.t.f+b.123' parsed; then
+    state=0
+  else
+    state=$?
+  fi
+
+  assert "$state" equals 0
+  assert "${(qkv)parsed}" same_as "${(qkv)result}"
+}
+
+@test 'Parse invalid' {
+  typeset -A parsed
+  if semver:parse '01.2.3' parsed; then
+    state=0
+  else
+    state=$?
+  fi
+
+  assert "$state" not_equal_to 0
+}

@@ -1,0 +1,22 @@
+emulate -L zsh
+
+(( $+1 )) || {
+  echo "Usage: $0 <variable name>"
+  return 1
+}
+
+semver:verify "$1" || return $?
+
+if [ "${(Pt)1}" = association ]; then
+  local -A __V=(${(Pkv)1})
+  local __VRES="${__V[major]}.${__V[minor]}.${__V[patch]}"
+
+  [ -z "${__V[prere]}" ] || __VRES="${__VRES}-${__V[prere]}"
+  [ -z "${__V[build]}" ] || __VRES="${__VRES}-${__V[build]}"
+
+  print -- "$__VRES"
+else
+  echo "$1"
+fi
+
+# vim: ft=zsh
