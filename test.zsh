@@ -2,6 +2,8 @@
 
 emulate -R zsh
 
+set -eu
+
 local me="${(%):-%x}"
 local mydir="${me:a:h}"
 export PATH="$mydir/bin:$PATH"
